@@ -116,7 +116,8 @@ export default {
       var param = {
         page: this.page,
         pageSize: this.pageSize,
-        sort: this.sortFlag ? 1 : -1
+        sort: this.sortFlag ? 1 : -1,
+        priceLevel: this.priceChecked
       };
       //axios.get("http://localhost:3000/goods", { params: param }).then((value) => {
       axios.get("/goods", { params: param }).then((value) => {
@@ -140,8 +141,10 @@ export default {
         }
       })
     },
-    setPriceFilter(v) {
-      this.priceChecked = v;
+    setPriceFilter(index) {
+      this.priceChecked = index;
+      this.page = 1;
+      this.getGoodsList();
     },
     showFilterPop() {
       this.filterBy = true;
