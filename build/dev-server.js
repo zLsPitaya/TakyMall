@@ -22,13 +22,14 @@ const autoOpenBrowser = !!config.dev.autoOpenBrowser
 const proxyTable = config.dev.proxyTable
 
 const app = express()
+    //const router = express.Router();
     /*// json数据接口*/
     // const router = express.Router()
     // const goodsData = require("./../mock/goods.json")
     // router.get("/goods", function(req, res) {
     //     res.json(goodsData);
     // })
-    // app.use(router);
+    //app.use(router);
 
 const compiler = webpack(webpackConfig)
 

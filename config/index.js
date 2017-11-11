@@ -31,9 +31,11 @@ module.exports = {
         assetsSubDirectory: 'static',
         assetsPublicPath: '/',
         proxyTable: {
-            // 代理端口
-            "/goods": {
-                target: "http://localhost:3000/goods"
+            '/goods/*': {
+                target: 'http://localhost:3000/'
+            },
+            '/users/*': {
+                target: 'http://localhost:3000/'
             }
         },
         // CSS Sourcemaps off by default because relative paths are "buggy"

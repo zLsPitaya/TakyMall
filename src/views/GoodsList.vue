@@ -119,9 +119,7 @@ export default {
         sort: this.sortFlag ? 1 : -1,
         priceLevel: this.priceChecked
       };
-      //axios.get("http://localhost:3000/goods", { params: param }).then((value) => {
-      axios.get("/goods", { params: param }).then((value) => {
-        //console.log(value);
+      axios.get("/goods/list", { params: param }).then((value) => {
         var res = value.data;
         this.loading = false;
         if (res.status === "0") {
@@ -140,6 +138,18 @@ export default {
           this.goodsList = [];
         }
       })
+    },
+    addCart(productId) {
+      axios.post("/goods/addCart", { productId: productId })
+        .then((res) => {
+          console.log(res);
+          var res = res.data;
+          if (res.status == 0) {
+            this.mdShowCart = true;
+          } else {
+            this.mdShow = true;
+          }
+        });
     },
     setPriceFilter(index) {
       this.priceChecked = index;
