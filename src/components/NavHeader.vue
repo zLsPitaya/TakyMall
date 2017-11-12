@@ -34,7 +34,6 @@
             <span class="navbar-link" v-text="nickName" v-if="nickName"></span>
             <a href="javascript:void(0)" class="navbar-link" @click="loginModalFlag=true" v-if="!nickName">登录</a>
             <a href="javascript:void(0)" class="navbar-link" @click="logOut" v-else>登出</a>
-            <!--<a href="javascript:void(0)" class="navbar-link">登出</a>-->
             <div class="navbar-cart-container">
               <span class="navbar-cart-count"></span>
               <a class="navbar-link" href="/#/cart">
@@ -53,7 +52,6 @@
             <div class="md-title">登录</div>
             <button class="md-close" @click="loginModalFlag=false">Close</button>
           </div>
-
           <div class="md-content">
             <div class="confirm-tips">
               <div class="error-wrap">

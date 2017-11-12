@@ -32,6 +32,11 @@ router.post("/login", function(req, res, next) {
                         userName: doc.userName
                     }
                 });
+            } else {
+                res.json({
+                    status: "-1",
+                    msg: "无此用户信息"
+                });
             }
         }
     });

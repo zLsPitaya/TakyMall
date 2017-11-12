@@ -142,7 +142,6 @@ export default {
     addCart(productId) {
       axios.post("/goods/addCart", { productId: productId })
         .then((res) => {
-          console.log(res);
           var res = res.data;
           if (res.status == 0) {
             this.mdShowCart = true;
