@@ -26,16 +26,16 @@ module.exports = {
     },
     dev: {
         env: require('./dev.env'),
-        port: process.env.PORT || 8080,
+        port: process.env.PORT || 8090,
         autoOpenBrowser: true,
         assetsSubDirectory: 'static',
         assetsPublicPath: '/',
         proxyTable: {
             '/goods/*': {
-                target: 'http://localhost:3000/'
+                target: 'http://localhost:4000/'
             },
             '/users/*': {
-                target: 'http://localhost:3000/'
+                target: 'http://localhost:4000/'
             }
         },
         // CSS Sourcemaps off by default because relative paths are "buggy"

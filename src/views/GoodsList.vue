@@ -144,8 +144,10 @@ export default {
         .then((res) => {
           var res = res.data;
           if (res.status == 0) {
+            alert("添加成功");
             this.mdShowCart = true;
           } else {
+            alert("添加失败");
             this.mdShow = true;
           }
         });

@@ -89,8 +89,14 @@ router.get("/list", (req, res, next) => {
 
 //加入到购物车
 router.post("/addCart", function(req, res, next) {
-    var userId = '100000077',
+    var userId = req.cookies.userId,
         productId = req.body.productId;
+    if (!userId) {
+        res.json({
+            status: "1",
+            msg: "未登录"
+        })
+    }
     var User = require('../models/user');
     User.findOne({ userId: userId }, function(err, userDoc) {
         if (err) {
