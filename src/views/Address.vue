@@ -1,6 +1,3 @@
-/**
-* Created by Song on 2017/10/23.
-*/
 <template>
     <div>
         <nav-header></nav-header>
@@ -64,7 +61,7 @@
                         <div class="addr-list">
                             <ul>
                                 <li v-for="(item,index) in addressListFilter" v-bind:class="{'check':checkIndex==index}"
-                                  @click="checkIndex=index;selectedAddrId=item.addressId">
+                                  @click="checkIndex=index;selectedAddrId=item.addressId" @dblclick="modifiyAddress(item)" title="双击修改收货地址">
                                     <dl>
                                         <dt>{{item.userName}}</dt>
                                         <dd class="address">{{item.streetName}}</dd>
@@ -80,7 +77,7 @@
                                     </div>
                                     <div class="addr-opration addr-default" v-if="item.isDefault">默认地址</div>
                                 </li>
-                                <li class="addr-new">
+                                <li class="addr-new" @click="modifiyAddress(null)" >
                                     <div class="add-new-inner">
                                         <i class="icon-add">
                                             <svg class="icon icon-add"><use xlink:href="#icon-add"></use></svg>
@@ -142,6 +139,47 @@
                 <a class="btn btn--m btn--red" href="javascript:;" @click="isMdShow_undel=false">取消</a>
             </div>
         </modal>
+        <div class="md-modal modal-msg md-modal-transition" v-bind:class="{'md-show':isMdShow_modify}">
+          <div class="md-modal-inner">
+            <div class="md-top">
+              <div class="md-title">{{modifyType}}</div>
+              <button class="md-close" @click="closePop">Close</button>
+            </div>
+            <div class="md-content">
+              <div class="confirm-tips">
+                <div class="error-wrap">
+                  <span class="error error-show" v-show="errorTip">数据读取错误，请稍后重试</span>
+                </div>
+                <ul>
+                  <li class="regi_form_input">
+                    <i class="icon IconPeople"></i>
+                    <input type="text" tabindex="1" name="userName" v-model="userName"
+                      class="regi_login_input regi_login_input_left" placeholder="收货人姓名" data-type="userName">
+                  </li>
+                  <li class="regi_form_input">
+                    <i class="icon IconAddress"></i>
+                    <input type="text" tabindex="2" name="streetName" v-model="streetName"
+                      class="regi_login_input regi_login_input_left login-input-no input_text" placeholder="收货地址">
+                  </li>
+                  <li class="regi_form_input">
+                    <i class="icon IconPostal"></i>
+                    <input type="text" tabindex="3" name="postCode" v-model="postCode"
+                      class="regi_login_input regi_login_input_left login-input-no input_text" placeholder="邮政编码">
+                  </li>
+                  <li class="regi_form_input">
+                    <i class="icon IconPhone"></i>
+                    <input type="text" tabindex="4" name="tel" v-model="tel"
+                      class="regi_login_input regi_login_input_left login-input-no input_text" placeholder="手机号码">
+                  </li>
+                </ul>
+              </div>
+              <div class="login-wrap">
+                <a href="javascript:;" class="btn-login" @click="saveAddress">提 交</a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="md-overlay" v-show="overLayFlag" @click.stop="closePop"></div>
         <nav-footer></nav-footer>
     </div>
 </template>
@@ -163,7 +201,17 @@
                 addressList:[],
                 isMdShow_del:false,
                 isMdShow_undel:false,
-                addressId:''
+                isMdShow_modify:false,  //新增或修改地址弹窗
+                overLayFlag:false,
+                _id: '',  //地址的objectId
+                addressId:'',
+                errorTip:'', //错误提示
+                userName: '', //收货人姓名
+                streetName: '', //收货地址
+                postCode: '', //邮政编码
+                tel:'',  //手机号码
+                modifyType: '',  //收货地址编辑方式
+                errorTip:false //维护地址信息错误提示
             }
         },
         mounted(){
@@ -185,7 +233,6 @@
                 axios.get("http://localhost:4000/users/addressList").then((response)=>{
                     let res = response.data;
                     this.addressList = res.result;
-                    //console.log(res.result);
                     this.selectedAddrId = this.addressList[0].addressId;
                 });
             },
@@ -202,7 +249,6 @@
                 }).then((response)=>{
                     let res = response.data;
                     if(res.status=='0'){
-                        console.log("set default");
                         this.init();
                     }
                 })
@@ -225,7 +271,6 @@
                 }).then((response)=>{
                     let res = response.data;
                     if(res.status=="0"){
-                        console.log("del suc");
                         this.isMdShow_del = false;
                         this.init();
                     }else if(res.status == -1){
@@ -233,6 +278,53 @@
                         this.isMdShow_undel = true;
                     }
                 })
+            },
+            modifiyAddress(obj){
+                if(obj){
+                  this._id = obj._id;
+                  this.addressId = obj.addressId;
+                  this.userName = obj.userName;
+                  this.streetName = obj.streetName;
+                  this.postCode = obj.postCode;
+                  this.tel = obj.tel;
+                  this.modifyType = "修改收货地址";
+                }else{
+                  this._id = '0';
+                  this.addressId = '';
+                  this.userName = '';
+                  this.streetName = '';
+                  this.postCode = '';
+                  this.tel = '';
+                  this.modifyType = "新增收货地址";
+                }
+                this.isMdShow_modify = true;
+                this.overLayFlag = true;
+            },
+            closePop() {
+                this.isMdShow_modify = false;
+                this.overLayFlag = false;
+            },
+            saveAddress(){
+              let param = {
+                _id: this._id,
+                addressId : this.addressId,
+                userName : this.userName,
+                streetName : this.streetName,
+                postCode : this.postCode,
+                tel : this.tel
+              };
+              axios.post("http://localhost:4000/users/saveAddress", { params: param }).then((res)=>{
+                let data = res.data;
+                if(data.status == "0"){
+                  this.init();
+                  this.closePop();
+                }else{
+                  this.errorTip = true;
+                  setTimeout(function() {
+                    location.reload();
+                  }, 1000);
+                }
+              })
             }
         }
     }

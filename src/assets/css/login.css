@@ -1,4 +1,4 @@
-.regi_form_input{
+.regi_form_input {
     position: relative;
     height: 42px;
     line-height: 42px;
@@ -6,9 +6,10 @@
     margin-bottom: 15px;
     font-size: 14px;
     overflow: hidden;
-    border:1px solid #ccc;
+    border: 1px solid #ccc;
     padding-bottom: 0;
 }
+
 .regi_form_input .icon {
     display: inline-block;
     float: left;
@@ -19,15 +20,29 @@
     background-image: url("/static/icon.png");
     background-repeat: no-repeat;
 }
+
 .regi_form_input .IconPwd {
     background-position: -198px 3px;
 }
-.regi_form_input .regi_login_input{
+
+.regi_form_input .IconPhone {
+    background-position: -98px 3px;
+}
+
+.regi_form_input .IconAddress {
+    background-position: -298px 8px;
+}
+
+.regi_form_input .IconPostal {
+    background-position: -501px 8px;
+}
+
+.regi_form_input .regi_login_input {
     position: absolute;
-    left:45px;
-    top:0;
+    left: 45px;
+    top: 0;
     padding: 9px 0 10px;
-    width: 270px;
+    width: 90%;
     font-size: 14px;
     zoom: 1;
     border: none;
@@ -36,7 +51,8 @@
     line-height: 23px;
     background: 0 0!important;
 }
-.md-title{
+
+.md-title {
     position: absolute;
     top: 14px;
     line-height: 24px;
@@ -46,10 +62,12 @@
     font-weight: 400;
     font-style: normal;
 }
-.login-wrap{
-    margin-top:30px;
+
+.login-wrap {
+    margin-top: 30px;
 }
-.md-content .btn-login{
+
+.md-content .btn-login {
     display: block;
     height: 38px;
     line-height: 38px;
@@ -59,11 +77,13 @@
     font-size: 18px;
     text-align: center;
 }
+
 .btn-login:hover {
     background: #61b1ef;
     border: 2px solid #61b1ef;
 }
-.error-wrap .error{
+
+.error-wrap .error {
     font-size: 12px;
     color: #d31723;
     visibility: hidden;
@@ -74,7 +94,8 @@
     text-align: left;
     background: url("/static/icon.png") 0 -100px no-repeat;
 }
-.md-content .error-wrap .error-show{
+
+.md-content .error-wrap .error-show {
     visibility: visible;
     height: auto;
 }

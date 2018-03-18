@@ -7,7 +7,7 @@
             <div class="footer__secondary__nav">
               <span>Copyright©2013-2017 www.zlspitaya.com All Rights Reserved.</span>
               <a href="#">
-                关于我们
+                本项目仅供个人学习使用。
               </a>
               <a href="#">
                 Taky Mall && 紫蓝的火龙果

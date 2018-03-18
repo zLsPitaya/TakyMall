@@ -1,6 +1,3 @@
-/**
-* Created by Song on 2017/10/23.
-*/
 <template>
   <div>
     <nav-header></nav-header>

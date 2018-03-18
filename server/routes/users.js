@@ -336,6 +336,60 @@ router.post("/delAddress", function(req, res, next) {
         }
     })
 });
+
+//保存地址接口
+router.post("/saveAddress", function(req, res, next) {
+    var userId = req.cookies.userId,
+        _id = req.body.params._id,
+        data = {
+            addressId: req.body.params.addressId,
+            userName: req.body.params.userName,
+            streetName: req.body.params.streetName,
+            postCode: req.body.params.postCode,
+            tel: req.body.params.tel,
+            isDefault: false
+        };
+    User.findOne({ userId: userId }, function(err, doc) {
+        if (err) {
+            res.json({
+                status: "1",
+                msg: err.message,
+                result: ''
+            });
+        } else {
+            if (_id == '0') {
+                data.addressId = "" + (parseInt(doc.addressList[doc.addressList.length - 1]) + 1);
+                doc.addressList.push(data);
+            } else {
+                data._id = _id;
+                doc.addressList.forEach(function(item, index) {
+                    if (item._id == data._id) {
+                        item.userName = data.userName;
+                        item.streetName = data.streetName;
+                        item.postCode = data.postCode;
+                        item.tel = data.tel;
+                    }
+                });
+            }
+            doc.save(function(err1, doc1) {
+                if (err1) {
+                    res.json({
+                        status: "1",
+                        msg: err1.message,
+                        result: ''
+                    });
+                } else {
+                    res.json({
+                        status: "0",
+                        msg: '',
+                        result: ''
+                    });
+                }
+            })
+        }
+    })
+})
+
 router.post("/payMent", function(req, res, next) {
     var userId = req.cookies.userId,
         addressId = req.body.addressId,
