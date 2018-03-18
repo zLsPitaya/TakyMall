@@ -35,13 +35,13 @@
             <a href="javascript:void(0)" class="navbar-link" @click="loginModalFlag=true" v-if="!nickName">登录</a>
             <a href="javascript:void(0)" class="navbar-link" @click="logOut" v-else>登出</a>
             <div class="navbar-cart-container">
-              <span class="navbar-cart-count"></span>
-              <a class="navbar-link" href="/#/cart">
-                <svg class="navbar-cart-logo">
-                  <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-cart"></use>
-                </svg>
-              </a>
-            </div>
+                <span class="navbar-cart-count" v-text="cartCount" v-if="cartCount  && showCart "></span>
+                <a class="navbar-link" href="/#/cart">
+                  <svg class="navbar-cart-logo">
+                    <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-cart"></use>
+                  </svg>
+                </a>
+              </div>
           </div>
         </div>
       </div>
@@ -85,16 +85,19 @@
 <script>
 import './../assets/css/login.css'
 import axios from 'axios'
+import { mapState } from 'vuex';
 export default {
-  //        name: 'NavHeader_Song',
   data() {
     return {
       userName: 'admin',
       userPwd: '123456',
       errorTip: false,
       loginModalFlag: false,
-      nickName: ''
+      showCart: false
     }
+  },
+  computed:{
+    ...mapState(['nickName', 'cartCount'])
   },
   mounted(){
     this.checkLogin();
@@ -105,7 +108,7 @@ export default {
         this.errorTip = true;
         return;
       }
-      axios.post("/users/login", {
+      axios.post("http://localhost:4000/users/login", {
         userName: this.userName,
         userPwd: this.userPwd
       }).then((response) => {
@@ -113,28 +116,44 @@ export default {
         if (res.status == "0") {
           this.errorTip = false;
           this.loginModalFlag = false;
-          this.nickName = res.result.userName;
+          this.$store.commit("updateUserInfo", res.result.userName);
+          this.getCartCount();
         } else {
           this.errorTip = true;
         }
       });
     },
     logOut() {
-      axios.post("/users/logout").then((response) => {
+      axios.post("http://localhost:4000/users/logout").then((response) => {
         let res = response.data;
         if (res.status == "0") {
-          this.nickName = '';
+          this.$store.commit("updateUserInfo", res.result.userName);
+          this.$store.commit("updateCartCount", res.result);
+          this.showCart = false;
+          this.$router.push("/goods");
         }
       })
     },
     checkLogin(){
-      axios.get("/users/checkLogin").then((response)=>{
+      axios.get("http://localhost:4000/users/checkLogin").then((response)=>{
         var res = response.data;
-        if(res.status == "10001"){
-          this.nickName = "";
+        var path = this.$route.pathname;
+        if(res.status == "0"){
+          this.$store.commit("updateUserInfo", res.result);
+          this.showCart = true;
+          this.loginModalFlag = false;
         }else{
-          this.nickName = res.result;
+          if(this.$route.path != "/goods"){
+            this.$router.push("/goods");
+          }
         }
+      });
+    },
+    getCartCount() {
+      axios.get("http://localhost:4000/users/getCartCount").then(res => {
+        var res = res.data;
+        this.$store.commit("updateCartCount", res.result);
+        this.showCart = true;
       });
     }
   }

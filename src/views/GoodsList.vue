@@ -150,7 +150,8 @@ export default {
         sort: this.sortFlag ? 1 : -1,
         priceLevel: this.priceChecked
       };
-      axios.get("/goods/list", { params: param }).then((value) => {
+      this.loading = true;
+      axios.get("http://localhost:4000/goods/list", { params: param }).then((value) => {
         var res = value.data;
         this.loading = false;
         if (res.status === "0") {
@@ -171,11 +172,12 @@ export default {
       })
     },
     addCart(productId) {
-      axios.post("/goods/addCart", { productId: productId })
+      axios.post("http://localhost:4000/goods/addCart", { productId: productId })
         .then((res) => {
           var res = res.data;
           if (res.status == 0) {
             this.mdShowCart = true;
+            this.$store.commit("updateCartCount", 1);
           } else {
             this.mdShow = true;
           }

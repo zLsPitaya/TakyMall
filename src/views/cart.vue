@@ -218,7 +218,7 @@ export default {
   },
   methods: {
     init() {
-      axios.get("/users/cartList").then((response) => {
+      axios.get("http://localhost:4000/users/cartList").then((response) => {
         let res = response.data;
         if(res.status != "10001"){
           this.cartList = res.result;
@@ -233,13 +233,14 @@ export default {
       this.modalConfirm = true;
     },
     delCart() {
-      axios.post("/users/cartDel", {
+      axios.post("http://localhost:4000/users/cartDel", {
         productId: this.delItem.productId
       }).then((response) => {
         let res = response.data;
         if (res.status == '0') {
           this.modalConfirm = false;
           var delCount = this.delItem.productNum;
+          this.$store.commit("updateCartCount", -delCount);
           this.init();
         }
       });
@@ -256,30 +257,29 @@ export default {
         item.checked = item.checked == "1" ? '0' : '1';
       }
 
-      axios.post("/users/cartEdit", {
+      axios.post("http://localhost:4000/users/cartEdit", {
         productId: item.productId,
         productNum: item.productNum,
         checked: item.checked
       }).then((response) => {
         let res = response.data;
         if (res.status == "0") {
-          this.init();
-          //this.$store.commit("updateCartCount", flag == "add" ? 1 : -1);
+          this.$store.commit("updateCartCount", flag == "add" ? 1 : -1);
         }
       })
     },
     toggleCheckAll() {
-      console.log(this)
+      //点击之前是未全选状态：通过本次点击切换到全选的状态
       var flag = !this.checkAllFlag;
       this.cartList.forEach((item) => {
         item.checked = flag ? '1' : '0';
       })
-      axios.post("/users/editCheckAll", {
+      axios.post("http://localhost:4000/users/editCheckAll", {
         checkAll: flag
       }).then((response) => {
         let res = response.data;
         if (res.status == '0') {
-          console.log("update suc");
+            console.log("update success");
         }
       })
     },
