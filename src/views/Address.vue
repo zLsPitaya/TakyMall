@@ -230,7 +230,7 @@
         },
         methods:{
             init(){
-                axios.get("http://localhost:4000/users/addressList").then((response)=>{
+                axios.get("/users/addressList").then((response)=>{
                     let res = response.data;
                     this.addressList = res.result;
                     this.selectedAddrId = this.addressList[0].addressId;
@@ -244,7 +244,7 @@
                 }
             },
             setDefault(addressId){
-                axios.post("http://localhost:4000/users/setDefault",{
+                axios.post("/users/setDefault",{
                     addressId:addressId
                 }).then((response)=>{
                     let res = response.data;
@@ -266,7 +266,7 @@
                 }
             },
             delAddress(){
-                axios.post("http://localhost:4000/users/delAddress",{
+                axios.post("/users/delAddress",{
                     addressId:this.addressId
                 }).then((response)=>{
                     let res = response.data;
@@ -313,7 +313,7 @@
                 postCode : this.postCode,
                 tel : this.tel
               };
-              axios.post("http://localhost:4000/users/saveAddress", { params: param }).then((res)=>{
+              axios.post("/users/saveAddress", { params: param }).then((res)=>{
                 let data = res.data;
                 if(data.status == "0"){
                   this.init();

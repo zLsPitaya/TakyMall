@@ -29,7 +29,11 @@ const store = new Vuex.Store({
             },
             //更新购物车信息
             updateCartCount(state, cartCount) {
-                state.cartCount += cartCount;
+                if (!cartCount) {
+                    state.cartCount = 0;
+                } else {
+                    state.cartCount += cartCount;
+                }
             }
         }
     })
@@ -44,7 +48,7 @@ new Vue({
     },
     methods: {
         checkLogin() {
-            axios.get('http://localhost:4000/users/checkLogin').then(res => {
+            axios.get('/users/checkLogin').then(res => {
                 var res = res.data;
                 if (res.status == "0") {
                     this.$store.commit("updateUserInfo", res.result);
@@ -56,10 +60,10 @@ new Vue({
             })
         },
         getCartCount() {
-            axios.get("http://localhost:4000/users/getCartCount").then(res => {
+            axios.get("/users/getCartCount").then(res => {
                 var res = res.data;
                 if (res.status == "0") {
-                    this.$store.commit("updateCartCount", res.result);
+                    this.$store.commit("updateCartCount", parseInt(res.result));
                 }
             })
         }

@@ -36,7 +36,7 @@
                 <ul>
                   <li v-for="item in goodsList">
                     <div class="pic">
-                      <a href="#"><img v-lazy="'/static/'+ item.productImage" alt=""></a>
+                      <a href="javascript:void(0);"><img v-lazy="'/static/'+ item.productImage" alt=""></a>
                     </div>
                     <div class="main">
                       <div class="name">{{item.productName}}</div>
@@ -151,7 +151,7 @@ export default {
         priceLevel: this.priceChecked
       };
       this.loading = true;
-      axios.get("http://localhost:4000/goods/list", { params: param }).then((value) => {
+      axios.get("/goods/list", { params: param }).then((value) => {
         var res = value.data;
         this.loading = false;
         if (res.status === "0") {
@@ -172,7 +172,7 @@ export default {
       })
     },
     addCart(productId) {
-      axios.post("http://localhost:4000/goods/addCart", { productId: productId })
+      axios.post("/goods/addCart", { productId: productId })
         .then((res) => {
           var res = res.data;
           if (res.status == 0) {

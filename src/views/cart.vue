@@ -215,7 +215,7 @@ export default {
   },
   methods: {
     init() {
-      axios.get("http://localhost:4000/users/cartList").then((response) => {
+      axios.get("/users/cartList").then((response) => {
         let res = response.data;
         if(res.status != "10001"){
           this.cartList = res.result;
@@ -230,7 +230,7 @@ export default {
       this.modalConfirm = true;
     },
     delCart() {
-      axios.post("http://localhost:4000/users/cartDel", {
+      axios.post("/users/cartDel", {
         productId: this.delItem.productId
       }).then((response) => {
         let res = response.data;
@@ -254,7 +254,7 @@ export default {
         item.checked = item.checked == "1" ? '0' : '1';
       }
 
-      axios.post("http://localhost:4000/users/cartEdit", {
+      axios.post("/users/cartEdit", {
         productId: item.productId,
         productNum: item.productNum,
         checked: item.checked
@@ -271,7 +271,7 @@ export default {
       this.cartList.forEach((item) => {
         item.checked = flag ? '1' : '0';
       })
-      axios.post("http://localhost:4000/users/editCheckAll", {
+      axios.post("/users/editCheckAll", {
         checkAll: flag
       }).then((response) => {
         let res = response.data;

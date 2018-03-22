@@ -157,7 +157,7 @@
         },
         methods:{
             init(){
-                axios.get("http://localhost:4000/users/cartList").then((response)=>{
+                axios.get("/users/cartList").then((response)=>{
                     let res = response.data;
                     this.cartList = res.result;
 
@@ -172,7 +172,7 @@
             },
             payMent(){
                 var addressId = this.$route.query.addressId;
-                axios.post("http://localhost:4000/users/payMent",{
+                axios.post("/users/payMent",{
                     addressId:addressId,
                     orderTotal:this.orderTotal
                 }).then((response)=>{
