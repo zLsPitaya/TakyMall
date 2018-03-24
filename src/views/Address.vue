@@ -61,7 +61,8 @@
                         <div class="addr-list">
                             <ul>
                                 <li v-for="(item,index) in addressListFilter" v-bind:class="{'check':checkIndex==index}"
-                                  @click="checkIndex=index;selectedAddrId=item.addressId" @dblclick="modifiyAddress(item)" title="双击修改收货地址">
+                                  @click="checkIndex=index;selectedAddrId=item.addressId" @dblclick="modifiyAddress(item)" title="双击修改收货地址"
+                                  @touchstart="longTouch(item)" @touchend="clearLoop">
                                     <dl>
                                         <dt>{{item.userName}}</dt>
                                         <dd class="address">{{item.streetName}}</dd>
@@ -148,33 +149,33 @@
             <div class="md-content">
               <div class="confirm-tips">
                 <div class="error-wrap">
-                  <span class="error error-show" v-show="errorTip">数据读取错误，请稍后重试</span>
+                  <span class="error error-show" v-show="errorTip">数据格式错误，请输入完整的数据</span>
                 </div>
                 <ul>
                   <li class="regi_form_input">
                     <i class="icon IconPeople"></i>
-                    <input type="text" tabindex="1" name="userName" v-model="userName"
+                    <input type="text" tabindex="1" name="userName" v-model.trim="userName"
                       class="regi_login_input regi_login_input_left" placeholder="收货人姓名" data-type="userName">
                   </li>
                   <li class="regi_form_input">
                     <i class="icon IconAddress"></i>
-                    <input type="text" tabindex="2" name="streetName" v-model="streetName"
+                    <input type="text" tabindex="2" name="streetName" v-model.trim="streetName"
                       class="regi_login_input regi_login_input_left login-input-no input_text" placeholder="收货地址">
                   </li>
                   <li class="regi_form_input">
                     <i class="icon IconPostal"></i>
-                    <input type="text" tabindex="3" name="postCode" v-model="postCode"
+                    <input type="text" tabindex="3" name="postCode" v-model.trim="postCode"
                       class="regi_login_input regi_login_input_left login-input-no input_text" placeholder="邮政编码">
                   </li>
                   <li class="regi_form_input">
                     <i class="icon IconPhone"></i>
-                    <input type="text" tabindex="4" name="tel" v-model="tel"
+                    <input type="text" tabindex="4" name="tel" v-model.trim="tel"
                       class="regi_login_input regi_login_input_left login-input-no input_text" placeholder="手机号码">
                   </li>
                 </ul>
               </div>
               <div class="login-wrap">
-                <a href="javascript:;" class="btn-login" @click="saveAddress">提 交</a>
+                <a href="javascript:void(0);" class="btn-login" @click="saveAddress">提 交</a>
               </div>
             </div>
           </div>
@@ -205,13 +206,14 @@
                 overLayFlag:false,
                 _id: '',  //地址的objectId
                 addressId:'',
-                errorTip:'', //错误提示
+                errorTip:false, //错误提示
                 userName: '', //收货人姓名
                 streetName: '', //收货地址
                 postCode: '', //邮政编码
                 tel:'',  //手机号码
                 modifyType: '',  //收货地址编辑方式
-                errorTip:false //维护地址信息错误提示
+                errorTip:false, //维护地址信息错误提示
+                timer: null   //计时器
             }
         },
         mounted(){
@@ -280,6 +282,7 @@
                 })
             },
             modifiyAddress(obj){
+                this.errorTip = false;
                 if(obj){
                   this._id = obj._id;
                   this.addressId = obj.addressId;
@@ -313,6 +316,11 @@
                 postCode : this.postCode,
                 tel : this.tel
               };
+              if(param.userName == "" || param.streetName == ""
+              || param.postCode == "" || param.tel == ""){
+                this.errorTip = true;
+                return;
+              }
               axios.post("/users/saveAddress", { params: param }).then((res)=>{
                 let data = res.data;
                 if(data.status == "0"){
@@ -325,6 +333,15 @@
                   }, 1000);
                 }
               })
+            },
+            longTouch(obj){ //移动端长按事件
+              let self = this;
+              this.timer = setTimeout(function() {
+                self.modifiyAddress(obj);
+              }, 1000);
+            },
+            clearLoop(){
+              clearTimeout(this.timer);
             }
         }
     }

@@ -201,7 +201,7 @@ export default {
 }
 
 .navbar-brand-logo {
-  /*width: 120px;*/
+  width: 120px;
   margin-top: 10px;
 }
 
