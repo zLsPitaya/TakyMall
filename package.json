@@ -2,7 +2,7 @@
   "name": "TakyMall",
   "version": "1.0.0",
   "description": "A Vue.js project",
-  "author": "worldsong <2060884089@qq.com>",
+  "author": "Taky <418570903@qq.com>",
   "private": true,
   "scripts": {
     "dev": "node build/dev-server.js",
